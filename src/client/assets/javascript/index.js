@@ -78,40 +78,25 @@ async function handleCreateRace() {
   //renderAt('#race', renderRaceStartView())
 
   // TODO - Get player_id and track_id from the store
-  const { player_id, track_id } = store;
+  const { player_id, track_id } = store
 	
   // const race = TODO - invoke the API call to create the race, then save the result
   const race = await createRace(player_id, track_id);
   renderAt('#race', renderRaceStartView(race.Track))
 
   // TODO - update the store with the race id
-  store.race_id = race.ID - 1;
-  console.log('race ', store.race_id, race)
-  console.log(store);
+  store.race_id = race.ID - 1
+  const { race_id } = store
 
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
-	/*
-	runCountdown()
-	.then(() => {
-		console.log('TODO - call the async function startRace')
-		// TODO - call the async function startRace
-		startRace(store.race_id)
-		.then(() => {
-			console.log('starting race')
-
-			// TODO - call the async function runRace
-			runRace(store.race_id)
-		})
-		.catch(err => console.log(err))
-	})
-	.catch(err => console.log(err));
-	*/
   await runCountdown();
 
-  await startRace(store.race_id)
+  // TODO - call the async function runRace
+  await startRace(race_id)
 
-  await runRace(store.race_id)
+  // TODO - call the async function runRace
+  await runRace(race_id)
 }
 
 function runRace(raceID) {
@@ -120,7 +105,6 @@ function runRace(raceID) {
     const raceInterval = setInterval(() => {
       getRace(store.race_id)
       .then(res => {
-        console.log(res)
         /* 
           TODO - if the race info status property is "in-progress", update the leaderboard by calling:
 
@@ -138,7 +122,6 @@ function runRace(raceID) {
           resolve(res) // resolve the promise
         */
         if (res.status === 'finished') {
-          console.log('finished')
           clearInterval(raceInterval) // to stop the interval from repeating
           renderAt('#race', resultsView(res.positions)) // to render the results view
           resolve(res) // resolve the promise
@@ -159,7 +142,7 @@ async function runCountdown() {
 
     return new Promise((resolve, reject) => {
       // TODO - use Javascript's built in setInterval method to count down once per second
-      const countdown = setInterval(function () {
+      const countdownInterval = setInterval(function () {
         try {
           timer = timer - 1
 
@@ -168,7 +151,7 @@ async function runCountdown() {
 	
           // TODO - if the countdown is done, clear the interval, resolve the promise, and return
           if (timer === 0) {
-            clearInterval(countdown)
+            clearInterval(countdownInterval)
             resolve()
           }
         } catch (error) {
@@ -182,8 +165,6 @@ async function runCountdown() {
 }
 
 function handleSelectPodRacer(target) {
-  console.log("selected a pod", target.id)
-
   // remove class selected from all racer options
   const selected = document.querySelector('#racers .selected')
   if(selected) {
@@ -194,12 +175,10 @@ function handleSelectPodRacer(target) {
   target.classList.add('selected')
 
   // TODO - save the selected racer to the store
-  store.player_id = target.id;
+  store.player_id = target.id
 }
 
 function handleSelectTrack(target) {
-  console.log("selected a track", target.id)
-
   // remove class selected from all track options
   const selected = document.querySelector('#tracks .selected')
   if(selected) {
@@ -210,13 +189,13 @@ function handleSelectTrack(target) {
   target.classList.add('selected')
 
   // TODO - save the selected track id to the store
-  store.track_id = target.id;
+  store.track_id = target.id
 }
 
 function handleAccelerate() {
-  console.log("accelerate button clicked")
   // TODO - Invoke the API call to accelerate
-  accelerate(store.race_id)
+  const { race_id } = store
+  accelerate(race_id)
 }
 
 // HTML VIEWS ------------------------------------------------
@@ -319,7 +298,8 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
-  let userPlayer = positions.find(e => e.id === parseInt(store.player_id))
+  const { player_id } = store
+  let userPlayer = positions.find(e => e.id === parseInt(player_id))
   userPlayer.driver_name += " (you)"
 
   positions = positions.sort((a, b) => (a.segment > b.segment) ? -1 : 1)
@@ -411,7 +391,7 @@ function startRace(id) {
     method: 'POST',
     ...defaultFetchOpts(),
   })
-  .then(res => console.log(res))
+  .then(res => res)
   .catch(err => console.log("Problem with getRace request::", err))
 }
 
