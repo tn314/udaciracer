@@ -79,6 +79,10 @@ async function handleCreateRace() {
 
   // TODO - Get player_id and track_id from the store
   const { player_id, track_id } = store
+
+  if ((!player_id) || (!track_id)) {
+    return alert('Please select player and track')
+  }
 	
   // const race = TODO - invoke the API call to create the race, then save the result
   const race = await createRace(player_id, track_id);
@@ -88,12 +92,19 @@ async function handleCreateRace() {
   store.race_id = race.ID - 1
   const { race_id } = store
 
+  // Disable accelerate button
+  const accelerateButton = document.getElementById('gas-peddle');
+  accelerateButton.disabled = true
+
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
   await runCountdown();
 
   // TODO - call the async function runRace
   await startRace(race_id)
+
+  // Enable accelerate button
+  accelerateButton.disabled = false
 
   // TODO - call the async function runRace
   await runRace(race_id)
@@ -194,6 +205,7 @@ function handleSelectTrack(target) {
 
 function handleAccelerate() {
   // TODO - Invoke the API call to accelerate
+  console.log('accelerating')
   const { race_id } = store
   accelerate(race_id)
 }
