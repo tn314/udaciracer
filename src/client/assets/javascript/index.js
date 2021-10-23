@@ -37,13 +37,13 @@ function setupClickHandlers() {
     const { target } = event
 
     // Race track form field
-    if (target.matches('.card.track')) {
-      handleSelectTrack(target)
+    if (target.matches('.card.track') || target.parentNode.matches('.card.track')) {
+      target.matches('.card.track') ? handleSelectTrack(target) : handleSelectTrack(target.parentNode)
     }
 
     // Podracer form field
-    if (target.matches('.card.podracer')) {
-      handleSelectPodRacer(target)
+    if (target.matches('.card.podracer') || target.parentNode.matches('.card.podracer')) {
+      target.matches('.card.podracer') ? handleSelectPodRacer(target) : handleSelectPodRacer(target.parentNode)
     }
 
     // Submit create race form
@@ -142,7 +142,6 @@ function runRace(raceID) {
     }, 500)
 
   })
-  // remember to add error handling for the Promise
 }
 
 async function runCountdown() {
@@ -151,7 +150,7 @@ async function runCountdown() {
     await delay(1000)
     let timer = 3
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       // TODO - use Javascript's built in setInterval method to count down once per second
       const countdownInterval = setInterval(function () {
         try {
@@ -166,7 +165,7 @@ async function runCountdown() {
             resolve()
           }
         } catch (error) {
-          reject(error)
+          console.log(error)
         }
       }, 1000)
     })
@@ -205,7 +204,6 @@ function handleSelectTrack(target) {
 
 function handleAccelerate() {
   // TODO - Invoke the API call to accelerate
-  console.log('accelerating')
   const { race_id } = store
   accelerate(race_id)
 }
