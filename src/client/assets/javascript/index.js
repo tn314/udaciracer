@@ -84,30 +84,34 @@ async function handleCreateRace() {
     return alert('Please select player and track')
   }
 	
-  // const race = TODO - invoke the API call to create the race, then save the result
-  const race = await createRace(player_id, track_id);
-  renderAt('#race', renderRaceStartView(race.Track))
+  try {
+    // const race = TODO - invoke the API call to create the race, then save the result
+    const race = await createRace(player_id, track_id);
+    renderAt('#race', renderRaceStartView(race.Track))
 
-  // TODO - update the store with the race id
-  store.race_id = race.ID - 1
-  const { race_id } = store
+    // TODO - update the store with the race id
+    store.race_id = race.ID - 1
+    const { race_id } = store
 
-  // Disable accelerate button
-  const accelerateButton = document.getElementById('gas-peddle');
-  accelerateButton.disabled = true
+    // Disable accelerate button
+    const accelerateButton = document.getElementById('gas-peddle');
+    accelerateButton.disabled = true
 
-  // The race has been created, now start the countdown
-  // TODO - call the async function runCountdown
-  await runCountdown();
+    // The race has been created, now start the countdown
+    // TODO - call the async function runCountdown
+    await runCountdown();
 
-  // TODO - call the async function runRace
-  await startRace(race_id)
+    // TODO - call the async function runRace
+    await startRace(race_id)
 
-  // Enable accelerate button
-  accelerateButton.disabled = false
+    // Enable accelerate button
+    accelerateButton.disabled = false
 
-  // TODO - call the async function runRace
-  await runRace(race_id)
+    // TODO - call the async function runRace
+    await runRace(race_id)
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 function runRace(raceID) {
