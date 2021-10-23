@@ -291,9 +291,12 @@ function resultsView(positions) {
       <h1>Race Results</h1>
     </header>
     <main>
-      ${raceProgress(positions)}
-      <a href="/race">Start a new race</a>
+      <section>
+        ${raceProgress(positions)}
+        <a class="button" href="/race">Start a new race</a>
+      <section>
     </main>
+    <footer></footer>
   `
 }
 
@@ -313,7 +316,7 @@ function raceProgress(positions) {
         </td>
       </tr>
     `
-  })
+  }).join('')
 
   return `
     <main>
