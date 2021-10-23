@@ -96,8 +96,8 @@ async function handleCreateRace() {
   const accelerateButton = document.getElementById('gas-peddle');
   accelerateButton.disabled = true
 
-	// The race has been created, now start the countdown
-	// TODO - call the async function runCountdown
+  // The race has been created, now start the countdown
+  // TODO - call the async function runCountdown
   await runCountdown();
 
   // TODO - call the async function runRace
@@ -152,7 +152,7 @@ async function runCountdown() {
 
     return new Promise(resolve => {
       // TODO - use Javascript's built in setInterval method to count down once per second
-      const countdownInterval = setInterval(function () {
+      const countdownInterval = setInterval(() => {
         try {
           timer = timer - 1
 
